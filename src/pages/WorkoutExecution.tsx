@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import SetCounter from '../components/SetCounter'
 import RestTimer from '../components/RestTimer'
-import TabBar from '../components/TabBar'
 import { getExercisesByDay, logWorkoutCompletion } from '../db/queries'
 import { useWorkoutSession } from '../store/workoutSession'
 import { useSettings } from '../store/settings'
@@ -12,11 +11,6 @@ const DAY_LABELS: Record<string, string> = {
   monday: 'Segunda', tuesday: 'Terça', wednesday: 'Quarta',
   thursday: 'Quinta', friday: 'Sexta',
 }
-
-const TABS = [
-  { key: 'main', label: 'Principal' },
-  { key: 'mobility', label: 'Mobilidade' },
-]
 
 function formatElapsed(s: number): string {
   const h = Math.floor(s / 3600)
@@ -50,6 +44,7 @@ function ExerciseRow({
   const allDone = completedSets >= exercise.sets
   const restTime = exercise.restSeconds ?? defaultRestSeconds
 
+  // Only run timer interval when this exercise is active
   useEffect(() => {
     if (isActive && isRestTimerRunning) {
       timerRef.current = setInterval(() => tickRestTimer(), 1000)
@@ -69,6 +64,7 @@ function ExerciseRow({
 
   return (
     <div className={`rounded-xl overflow-hidden transition-all ${isActive ? 'bg-gray-700' : 'bg-gray-800'}`}>
+      {/* Row header — always visible, tap to expand/collapse */}
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between p-4 text-left"
@@ -83,6 +79,8 @@ function ExerciseRow({
             </p>
           </div>
         </div>
+
+        {/* Progress badge */}
         <div className="flex items-center gap-2 ml-2 shrink-0">
           {allDone ? (
             <span className="text-green-400 font-bold text-lg">✓</span>
@@ -96,11 +94,14 @@ function ExerciseRow({
         </div>
       </button>
 
+      {/* Expanded content */}
       {isActive && (
         <div className="px-4 pb-4 flex flex-col gap-4 border-t border-gray-600 pt-4">
           {exercise.description && (
             <p className="text-sm text-gray-400">{exercise.description}</p>
           )}
+
+          {/* Rest timer */}
           {(isRestTimerRunning || restTimerSeconds > 0) && (
             <div className="bg-gray-800 rounded-2xl p-5 flex flex-col items-center gap-3">
               <p className="text-xs text-gray-500 uppercase tracking-wide">Descanso</p>
@@ -125,6 +126,8 @@ function ExerciseRow({
               </div>
             </div>
           )}
+
+          {/* Set counter */}
           {!isRestTimerRunning && restTimerSeconds === 0 && (
             <SetCounter
               completed={completedSets}
@@ -134,35 +137,6 @@ function ExerciseRow({
           )}
         </div>
       )}
-    </div>
-  )
-}
-
-function MobilityReadOnly({ exercises }: { exercises: Exercise[] }) {
-  if (exercises.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-gray-500">Nenhum exercício de mobilidade.</p>
-      </div>
-    )
-  }
-  return (
-    <div className="flex flex-col gap-2">
-      {exercises.map((ex, i) => (
-        <div key={ex.id} className="bg-gray-800 rounded-xl p-4">
-          <p className="text-xs text-gray-500 uppercase tracking-wide mb-0.5">
-            {i + 1}. Mobilidade
-          </p>
-          <p className="text-white font-medium">{ex.name}</p>
-          <p className="text-sm text-gray-400 mt-0.5">
-            {ex.sets} × {ex.reps}
-            {ex.weight > 0 ? ` — ${ex.weight}kg` : ' — Peso corporal'}
-          </p>
-          {ex.description && (
-            <p className="text-xs text-gray-500 mt-1">{ex.description}</p>
-          )}
-        </div>
-      ))}
     </div>
   )
 }
@@ -180,7 +154,6 @@ export default function WorkoutExecution() {
   const workoutTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const [done, setDone] = useState(false)
   const [mobilityExercises, setMobilityExercises] = useState<Exercise[]>([])
-  const [activeTab, setActiveTab] = useState<'main' | 'mobility'>('main')
 
   useEffect(() => {
     if (!day) return
@@ -193,6 +166,7 @@ export default function WorkoutExecution() {
     return () => reset()
   }, [day])
 
+  // Workout stopwatch
   useEffect(() => {
     workoutTimerRef.current = setInterval(() => tickWorkout(), 1000)
     return () => { if (workoutTimerRef.current) clearInterval(workoutTimerRef.current) }
@@ -249,7 +223,7 @@ export default function WorkoutExecution() {
         </p>
       </div>
 
-      {/* Workout timer */}
+      {/* General workout timer — tap to pause/resume */}
       <button
         onClick={toggleWorkoutTimer}
         className={`mx-4 mb-4 rounded-2xl py-4 flex flex-col items-center gap-1 transition-colors ${
@@ -268,8 +242,8 @@ export default function WorkoutExecution() {
         </span>
       </button>
 
-      {/* Progress bar — conta apenas exercícios principais */}
-      <div className="mx-4 mb-2">
+      {/* Progress bar */}
+      <div className="mx-4 mb-4">
         <div className="w-full bg-gray-800 rounded-full h-1.5">
           <div
             className="bg-green-500 h-1.5 rounded-full transition-all duration-500"
@@ -278,30 +252,22 @@ export default function WorkoutExecution() {
         </div>
       </div>
 
-      {/* Tab bar */}
-      <div className="px-4">
-        <TabBar
-          tabs={TABS}
-          active={activeTab}
-          onChange={(k) => setActiveTab(k as 'main' | 'mobility')}
-        />
-      </div>
-
-      {/* Content */}
+      {/* Exercise list */}
       <div className="flex-1 flex flex-col gap-2 px-4 pb-28 overflow-y-auto">
-        {activeTab === 'main' ? (
-          exercises.map((ex, i) => (
-            <ExerciseRow
-              key={ex.id}
-              exercise={ex}
-              index={i}
-              completedSets={setsCompleted[ex.id!] ?? 0}
-              isActive={activeExerciseId === ex.id}
-              onToggle={() => handleToggle(ex.id!)}
-            />
-          ))
-        ) : (
-          <MobilityReadOnly exercises={mobilityExercises} />
+        {exercises.map((ex, i) => (
+          <ExerciseRow
+            key={ex.id}
+            exercise={ex}
+            index={i}
+            completedSets={setsCompleted[ex.id!] ?? 0}
+            isActive={activeExerciseId === ex.id}
+            onToggle={() => handleToggle(ex.id!)}
+          />
+        ))}
+
+        {/* Mobility section — collapsed by default */}
+        {mobilityExercises.length > 0 && (
+          <MobilityCollapse exercises={mobilityExercises} />
         )}
       </div>
 
@@ -318,6 +284,39 @@ export default function WorkoutExecution() {
           {allMainDone ? 'Finalizar Treino 🏁' : `Encerrar (${doneCount}/${exercises.length} completos)`}
         </button>
       </div>
+    </div>
+  )
+}
+
+function MobilityCollapse({ exercises }: { exercises: Exercise[] }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="bg-gray-800 rounded-xl overflow-hidden mt-2">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex justify-between items-center p-4 text-left"
+      >
+        <span className="text-sm font-semibold text-gray-400 uppercase tracking-wide">
+          Mobilidade ({exercises.length})
+        </span>
+        <span className="text-gray-500">{open ? '▲' : '▼'}</span>
+      </button>
+      {open && (
+        <div className="flex flex-col gap-2 px-4 pb-4">
+          {exercises.map((ex) => (
+            <div key={ex.id} className="bg-gray-700 rounded-xl p-3">
+              <p className="text-sm font-medium text-white">{ex.name}</p>
+              <p className="text-xs text-gray-400 mt-0.5">
+                {ex.sets} × {ex.reps}
+                {ex.weight > 0 ? ` · ${ex.weight}kg` : ''}
+              </p>
+              {ex.description && (
+                <p className="text-xs text-gray-500 mt-1">{ex.description}</p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
