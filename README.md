@@ -1,3 +1,5 @@
+TimeOut is a mobile-first PWA for executing personal gym training programs. Built for personal use with full offline support, the app lets you manage and follow fixed weekly workouts from Monday to Friday. Features include a pauseable general workout stopwatch, a rest timer with pause/resume, per-exercise set tracking, optional mobility exercises, workout completion history, and JSON/CSV import-export. Built with React, Vite, TypeScript, Tailwind CSS, and Dexie.js (IndexedDB).
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
