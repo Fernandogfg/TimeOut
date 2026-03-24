@@ -1,0 +1,143 @@
+{
+  "monday": {
+    "main": [
+      {
+        "day": "monday",
+        "type": "main",
+        "order": 0,
+        "name": "Flexão de Braços",
+        "sets": 3,
+        "reps": 15,
+        "weight": 0,
+        "restSeconds": 60
+      },
+      {
+        "day": "monday",
+        "type": "main",
+        "order": 1,
+        "name": "Crucifixo Máquina Articulada",
+        "sets": 4,
+        "reps": 15,
+        "weight": 5,
+        "description": "Carga: 5kg por lado (halter)",
+        "restSeconds": 90
+      },
+      {
+        "day": "monday",
+        "type": "main",
+        "order": 2,
+        "name": "Supino Inclinado com Halteres",
+        "sets": 4,
+        "reps": 10,
+        "weight": 16,
+        "description": "Carga: 16kg por lado (halter)",
+        "restSeconds": 90
+      },
+      {
+        "day": "monday",
+        "type": "main",
+        "order": 3,
+        "name": "Crucifixo Máquina",
+        "sets": 3,
+        "reps": 10,
+        "weight": 50,
+        "restSeconds": 90
+      },
+      {
+        "day": "monday",
+        "type": "main",
+        "order": 4,
+        "name": "Elevação Frontal com Halteres",
+        "sets": 3,
+        "reps": 15,
+        "weight": 6,
+        "description": "Carga: 6kg por lado (halter)",
+        "restSeconds": 75
+      },
+      {
+        "day": "monday",
+        "type": "main",
+        "order": 5,
+        "name": "Tríceps Francês na Polia com Corda",
+        "sets": 3,
+        "reps": 15,
+        "weight": 10,
+        "restSeconds": 75
+      },
+      {
+        "day": "monday",
+        "type": "main",
+        "order": 6,
+        "name": "Abdominal Canivete",
+        "sets": 4,
+        "reps": 20,
+        "weight": 0,
+        "description": "Combinado com Abdominal Infra — alterne os dois",
+        "restSeconds": 60
+      },
+      {
+        "day": "monday",
+        "type": "main",
+        "order": 7,
+        "name": "Abdominal Infra com as Pernas Flexionadas",
+        "sets": 4,
+        "reps": 15,
+        "weight": 0,
+        "description": "Combinado com Abdominal Canivete — alterne os dois",
+        "restSeconds": 60
+      }
+    ],
+    "mobility": [
+      {
+        "day": "monday",
+        "type": "mobility",
+        "order": 0,
+        "name": "Mobilidade de Escápula X",
+        "sets": 1,
+        "reps": 10,
+        "weight": 0,
+        "description": "Aquecimento combinado (A) — alterne com Dorsal VII, Peitoral Espaldar, Escápula I e Ombro Vassoura"
+      },
+      {
+        "day": "monday",
+        "type": "mobility",
+        "order": 1,
+        "name": "Mobilidade Dorsal VII",
+        "sets": 1,
+        "reps": 10,
+        "weight": 0,
+        "description": "Aquecimento combinado (B)"
+      },
+      {
+        "day": "monday",
+        "type": "mobility",
+        "order": 2,
+        "name": "Alongamento de Peitoral Espaldar",
+        "sets": 1,
+        "reps": 20,
+        "weight": 0,
+        "description": "Aquecimento combinado (C) — 20 segundos"
+      },
+      {
+        "day": "monday",
+        "type": "mobility",
+        "order": 3,
+        "name": "Mobilidade de Escápula I",
+        "sets": 1,
+        "reps": 12,
+        "weight": 0,
+        "description": "Aquecimento combinado (D)"
+      },
+      {
+        "day": "monday",
+        "type": "mobility",
+        "order": 4,
+        "name": "Mobilidade de Ombro com Cabo de Vassoura",
+        "sets": 1,
+        "reps": 12,
+        "weight": 0,
+        "description": "Aquecimento combinado (E)"
+      }
+    ]
+  }
+}
