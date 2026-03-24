@@ -24,7 +24,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-900 text-white p-4 max-w-md mx-auto">
       <div className="flex justify-between items-center mb-6 pt-2">
-        <h1 className="text-2xl font-bold">⏱ TimeOut</h1>
+        <h1 className="text-2xl font-bold">⏱ TimeOuts</h1>
         <Link to="/settings" className="text-gray-400 text-sm px-3 py-2 bg-gray-800 rounded-xl">
           ⚙ Config
         </Link>
